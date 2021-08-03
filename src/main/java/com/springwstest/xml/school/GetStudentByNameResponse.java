@@ -2,11 +2,11 @@
 // 此文件是由 JavaTM Architecture for XML Binding (JAXB) 引用实现 v2.2.7 生成的
 // 请访问 <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // 在重新编译源模式时, 对此文件的所有修改都将丢失。
-// 生成时间: 2021.07.18 时间 03:06:15 PM ICT 
+// 生成时间: 2021.08.03 时间 05:02:35 PM ICT 
 //
 
 
-package com.howtodoinjava.xml.school;
+package com.springwstest.xml.school;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Student" type="{http://www.howtodoinjava.com/xml/school}Student"/>
+ *         &lt;element name="Student" type="{http://www.springwsTest.com/xml/school}Student"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -38,8 +38,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "student"
 })
-@XmlRootElement(name = "StudentDetailsResponse")
-public class StudentDetailsResponse {
+@XmlRootElement(name = "GetStudentByNameResponse")
+public class GetStudentByNameResponse {
 
     @XmlElement(name = "Student", required = true)
     protected Student student;

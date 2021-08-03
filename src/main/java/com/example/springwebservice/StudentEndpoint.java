@@ -1,7 +1,7 @@
 package com.example.springwebservice;
 
-import com.howtodoinjava.xml.school.StudentDetailsRequest;
-import com.howtodoinjava.xml.school.StudentDetailsResponse;
+import com.alibaba.fastjson.JSON;
+import com.springwstest.xml.school.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -10,18 +10,24 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
 public class StudentEndpoint {
-    private static final String NAMESPACE_URI = "http://www.howtodoinjava.com/xml/school";
-    private StudentRepository StudentRepository;
+    private static final String NAMESPACE_URI = "http://www.springwsTest.com/xml/school";
     @Autowired
-    public StudentEndpoint(StudentRepository StudentRepository) {
-        this.StudentRepository = StudentRepository;
+    private StudentRepository studentRepository;
+    private ObjectFactory objectFactory=new ObjectFactory();
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetStudentByNameRequest")
+    @ResponsePayload
+    public GetStudentByNameResponse GetStudentByName(@RequestPayload GetStudentByNameRequest request) {
+        GetStudentByNameResponse response = objectFactory.createGetStudentByNameResponse();
+        response.setStudent(studentRepository.findStudent(request.getName()));
+        return response;
     }
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "StudentDetailsRequest")
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetStudentsRequest")
     @ResponsePayload
-    public StudentDetailsResponse getStudent(@RequestPayload StudentDetailsRequest request) {
-        StudentDetailsResponse response = new StudentDetailsResponse();
-        response.setStudent(StudentRepository.findStudent(request.getName()));
+    public GetStudentsResponse GetStudents(@RequestPayload GetStudentsRequest request) {
+        GetStudentsResponse response = objectFactory.createGetStudentsResponse();
+        response.setJsonString(JSON.toJSONString(studentRepository.getAllStudentInfo()));
         return response;
     }
 

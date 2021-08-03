@@ -1,11 +1,12 @@
 package com.example.springwebservice;
 
-import com.howtodoinjava.xml.school.Student;
+import com.springwstest.xml.school.Student;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -43,5 +44,9 @@ public class StudentRepository {
     public Student findStudent(String name) {
         Assert.notNull(name, "The Student's name must not be null");
         return students.get(name);
+    }
+
+    public Collection<Student> getAllStudentInfo(){
+        return students.values();
     }
 }

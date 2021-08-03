@@ -21,15 +21,15 @@ public class Config extends WsConfigurerAdapter {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
         servlet.setTransformWsdlLocations(true);
-        return new ServletRegistrationBean(servlet, "/service/*");
+        return new ServletRegistrationBean(servlet, "/webService/*");
     }
-    @Bean(name = "studentDetailsWsdl")
+    @Bean(name = "StudentWsdl")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema countriesSchema)
     {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-        wsdl11Definition.setPortTypeName("StudentDetailsPort");
-        wsdl11Definition.setLocationUri("/service/student-details");
-        wsdl11Definition.setTargetNamespace("http://www.howtodoinjava.com/xml/school");
+        wsdl11Definition.setPortTypeName("StudentPort");
+        wsdl11Definition.setLocationUri("/webService/studentInfo");
+        wsdl11Definition.setTargetNamespace("http://www.springwsTest.com/xml/school");
         wsdl11Definition.setSchema(countriesSchema);
         return wsdl11Definition;
     }
