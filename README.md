@@ -4,32 +4,26 @@ Spring项目中的WebService简单程序,大致步骤:
 
 2. 使用jaxb2生成`com.springwstest.xml.school`包下的代码
 
-   ```xml
-   <build>
-           <plugins>            
-               <plugin>
-                   <groupId>org.codehaus.mojo</groupId>
-                   <artifactId>jaxb2-maven-plugin</artifactId>
-                   <version>1.6</version>
-                   <executions>
-                       <execution>
-                           <id>xjc</id>
-                           <goals>
-                               <goal>xjc</goal>
-                           </goals>
-                       </execution>
-                   </executions>
-                   <configuration>
-                       <!--xsd文件存放目录-->
-                 		<schemaDirectory>${project.basedir}/src/main/resources/</schemaDirectory>
-                       <!--代码生成目录-->
-                       <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                       <clearOutputDir>false</clearOutputDir>
-                   </configuration>
-               </plugin>
-           </plugins>
-       </build>
-   ```
+   > #### jaxb2构件配置
+   >
+   > ```xml
+   > <build>
+   >     <plugins>            
+   >         <plugin>
+   >             <groupId>org.codehaus.mojo</groupId>
+   >             <artifactId>jaxb2-maven-plugin</artifactId>
+   >             <version>1.6</version>
+   >             <configuration>
+   >                 <!--xsd文件存放目录-->
+   >                 <schemaDirectory>${project.basedir}/src/main/resources/</schemaDirectory>
+   >                 <!--代码生成目录-->
+   >                 <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+   >                 <clearOutputDir>false</clearOutputDir>
+   >             </configuration>
+   >         </plugin>
+   >     </plugins>
+   > </build>
+   > ```
 
 3. 编写EndPoint类
 
@@ -46,7 +40,7 @@ Spring项目中的WebService简单程序,大致步骤:
        }
    }
    ```
-   
+
 4. 配置Config文件
 
    ```java
@@ -83,4 +77,77 @@ Spring项目中的WebService简单程序,大致步骤:
 
 5. 配置完成后访问:http://localhost:+端口+拦截器地址+DefaultWsdl11Definition类的名字，即可或得wsdl文件
 
-6. 使用axis生成客户端来访问webservice服务,pom引用在Maven库下载即可
+6. 使用axis生成客户端来访问webservice服务
+
+   > #### Pom配置
+   >
+   > #### 1.jar包
+   >
+   > ```xml
+   > <dependency>
+   >     <groupId>org.apache.axis2</groupId>
+   >     <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+   >     <version>1.7.9</version>
+   > </dependency>
+   > <dependency>
+   >     <groupId>org.apache.axis2</groupId>
+   >     <artifactId>axis2-jaxbri</artifactId>
+   >     <version>1.7.9</version>
+   > </dependency>
+   > <dependency>
+   >     <groupId>org.apache.axis2</groupId>
+   >     <artifactId>axis2-jaxws</artifactId>
+   >     <version>1.7.9</version>
+   > </dependency>
+   > ```
+   >
+   > #### 2.Build
+   >
+   > ```xml
+   > <plugin>
+   >     <groupId>org.apache.axis2</groupId>
+   >     <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+   >     <version>1.7.9</version>
+   >     <configuration>
+   >        <!-- wsdl默认位置为resources文件夹,默认名称为service.wsdl -->
+   >         <overWrite>true</overWrite><!--生成时覆盖文件-->
+   >         <packageName>com.clienttest.test</packageName><!--包名-->
+   >         <outputDirectory>${project.basedir}/src/main/java</outputDirectory><!--路径-->
+   >     </configuration>
+   > </plugin>
+   > ```
+   >
+   > 更多属性查看[官方介绍]([axis2-wsdl2code-maven-plugin – axis2-wsdl2code:wsdl2code (apache.org)](http://axis.apache.org/axis2/java/core/tools/maven-plugins/axis2-wsdl2code-maven-plugin/wsdl2code-mojo.html))
+   >
+   > #### 生成文件测试
+   >
+   > #### 1.调用get方法,然后返回Response
+   >
+   > ```java
+   > try{
+   >     StudentPortServiceStub stub =new StudentPortServiceStub();
+   >     log.info("Start!");
+   >     log.info(stub.getStudents(new StudentPortServiceStub.GetStudentsRequest()).getJsonString());
+   >     log.info("End!");
+   > }catch(Exception error){
+   >     log.error("获取Students信息出错了",error);
+   > }
+   > ```
+   >
+   > #### 2.传入CallBackHandler
+   >
+   > 可能是使用的方式不正确,没有反应
+   >
+   > ```java
+   > try{
+   >     StudentPortServiceStub stub =new StudentPortServiceStub();
+   >     stub.startgetStudents(new StudentPortServiceStub.GetStudentsRequest(), new StudentPortServiceCallbackHandler() {
+   >         @Override
+   >         public void receiveResultgetStudents(StudentPortServiceStub.GetStudentsResponse result) {
+   >             log.info(result.getJsonString());
+   >         }
+   >     });
+   > }catch(Exception error){
+   >     log.error("获取Students信息出错了",error);
+   > }
+   > ```
