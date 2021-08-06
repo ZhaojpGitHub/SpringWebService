@@ -1,6 +1,5 @@
 package com.example.springwebservice;
 
-import com.alibaba.fastjson.JSON;
 import com.springwstest.xml.school.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -13,21 +12,21 @@ public class StudentEndpoint {
     private static final String NAMESPACE_URI = "http://www.springwsTest.com/xml/school";
     @Autowired
     private StudentRepository studentRepository;
-    private ObjectFactory objectFactory=new ObjectFactory();
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetStudentByNameRequest")
     @ResponsePayload
     public GetStudentByNameResponse GetStudentByName(@RequestPayload GetStudentByNameRequest request) {
-        GetStudentByNameResponse response = objectFactory.createGetStudentByNameResponse();
+        GetStudentByNameResponse response = new GetStudentByNameResponse();
         response.setStudent(studentRepository.findStudent(request.getName()));
         return response;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetStudentsRequest")
     @ResponsePayload
-    public GetStudentsResponse GetStudents(@RequestPayload GetStudentsRequest request) {
-        GetStudentsResponse response = objectFactory.createGetStudentsResponse();
-        response.setJsonString(JSON.toJSONString(studentRepository.getAllStudentInfo()));
+    public GetStudentsResponse GetStudents() {
+        GetStudentsResponse response = new GetStudentsResponse();
+        response.getStudents().add(new Student("test1",78,"地址1"));
+        response.getStudents().add(new Student("test2",20,"地址2"));
         return response;
     }
 
